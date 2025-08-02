@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProKer Debug</title>
+    <style>
+        body { font-family: monospace; margin: 20px; }
+        .error { color: red; }
+        .success { color: green; }
+        .info { color: blue; }
+        .section { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>ProKer Debug Console</h1>
+    
+    <div class="section">
+        <h2>Script Loading Status</h2>
+        <div id="script-status"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Storage Status</h2>
+        <div id="storage-status"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Console Output</h2>
+        <div id="console-output" style="background: #f5f5f5; padding: 10px; height: 300px; overflow-y: auto;"></div>
+    </div>
+
+    <script>
+        const output = document.getElementById('console-output');
+        const scriptStatus = document.getElementById('script-status');
+        const storageStatus = document.getElementById('storage-status');
+        
+        // Override console.log
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            output.innerHTML += `<div class="info">[LOG] ${args.join(' ')}</div>`;
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            output.innerHTML += `<div class="error">[ERROR] ${args.join(' ')}</div>`;
+        };
+        
+        // Test script loading
+        const scripts = [
+            'js/utils.js',
+            'js/storage.js',
+            'js/ui.js',
+            'js/auth.js',
+            'js/projects.js',
+            'js/tasks.js',
+            'js/router.js',
+            'js/app.js'
+        ];
+        
+        let loadedScripts = 0;
+        
+        scripts.forEach(script => {
+            const scriptEl = document.createElement('script');
+            scriptEl.src = script;
+            scriptEl.onload = () => {
+                loadedScripts++;
+                scriptStatus.innerHTML += `<div class="success">✓ ${script} loaded</div>`;
+                
+                if (loadedScripts === scripts.length) {
+                    console.log('All scripts loaded successfully');
+                    checkStorage();
+                    testApp();
+                }
+            };
+            scriptEl.onerror = () => {
+                scriptStatus.innerHTML += `<div class="error">✗ ${script} failed to load</div>`;
+            };
+            document.body.appendChild(scriptEl);
+        });
+        
+        function checkStorage() {
+            const keys = ['proker_user', 'proker_session', 'proker_onboarding_complete'];
+            keys.forEach(key => {
+                const value = localStorage.getItem(key);
+                if (value) {
+                    storageStatus.innerHTML += `<div class="success">✓ ${key}: ${value.substring(0, 50)}...</div>`;
+                } else {
+                    storageStatus.innerHTML += `<div class="info">- ${key}: not set</div>`;
+                }
+            });
+        }
+        
+        function testApp() {
+            console.log('Testing app initialization...');
+            
+            // Check if app object exists
+            if (typeof app !== 'undefined') {
+                console.log('App object found');
+                
+                // Check if router exists
+                if (typeof router !== 'undefined') {
+                    console.log('Router object found');
+                } else {
+                    console.error('Router object not found');
+                }
+                
+                // Check if storage exists
+                if (typeof storage !== 'undefined') {
+                    console.log('Storage object found');
+                } else {
+                    console.error('Storage object not found');
+                }
+                
+                // Try to initialize
+                try {
+                    console.log('Attempting to initialize app...');
+                    app.init();
+                } catch (e) {
+                    console.error('App initialization failed:', e.message);
+                }
+            } else {
+                console.error('App object not found');
+            }
+        }
+    </script>
+</body>
+</html>

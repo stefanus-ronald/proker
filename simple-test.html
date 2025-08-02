@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProKer Simple Test</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/screens.css">
+    <style>
+        #test-content {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .test-button {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="test-content">
+        <h1>ProKer Simple Test</h1>
+        <p>Testing if the CSS and basic functionality works</p>
+        
+        <button class="btn btn-primary test-button" onclick="testLogin()">Test Login Screen</button>
+        <button class="btn btn-secondary test-button" onclick="testDashboard()">Test Dashboard Screen</button>
+        <button class="btn btn-outline test-button" onclick="clearContent()">Clear</button>
+        
+        <hr style="margin: 20px 0;">
+        
+        <div id="app-content"></div>
+    </div>
+    
+    <script>
+        // Simple storage mock
+        const storage = {
+            getCurrentUser: () => ({ name: 'Test User', email: 'test@example.com' }),
+            getProjects: () => [
+                { id: '1', name: 'Test Project', description: 'A test project', progress: 60, status: 'active', team: ['1', '2'] }
+            ],
+            getTasks: () => [
+                { id: '1', title: 'Test Task', status: 'todo', priority: 'high', dueDate: new Date().toISOString() }
+            ],
+            getTaskById: (id) => ({ id: '1', title: 'Test Task', status: 'todo' })
+        };
+        
+        // Simple utilities
+        const utils = {
+            getGreeting: () => 'Good morning',
+            generateId: () => 'id-' + Date.now()
+        };
+        
+        function testLogin() {
+            const content = document.getElementById('app-content');
+            content.innerHTML = `
+                <div class="screen auth-screen">
+                    <div class="auth-header">
+                        <h1 class="auth-title">Welcome Back</h1>
+                        <p class="auth-subtitle">Sign in to continue to ProKer</p>
+                    </div>
+                    
+                    <form class="auth-form">
+                        <div class="form-group">
+                            <label class="label">Email</label>
+                            <input type="email" class="input" placeholder="Enter your email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="label">Password</label>
+                            <input type="password" class="input" placeholder="Enter your password">
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary btn-full">Sign In</button>
+                    </form>
+                </div>
+            `;
+        }
+        
+        function testDashboard() {
+            const content = document.getElementById('app-content');
+            content.innerHTML = `
+                <div class="screen">
+                    <div class="dashboard-header">
+                        <h1 class="dashboard-greeting">Good morning, Test User! 👋</h1>
+                        <p class="dashboard-subtitle">Here's your project overview</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">📁</div>
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Total Projects</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">✓</div>
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Active Tasks</div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-header">
+                            <div>
+                                <h4 class="project-title">Test Project</h4>
+                                <p class="project-description">A sample project for testing</p>
+                            </div>
+                            <span class="badge badge-primary">Active</span>
+                        </div>
+                        
+                        <div class="project-progress">
+                            <div class="project-progress-bar">
+                                <div class="project-progress-fill" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function clearContent() {
+            document.getElementById('app-content').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

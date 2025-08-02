@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>ProKer - Project Management App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Josefin+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Variables - Design System */
+        :root {
+            /* Primary Colors */
+            --primary: #FF8368;
+            --primary-dark: #F44F46;
+            --primary-light: #FFB5A3;
+            
+            /* Neutral Colors */
+            --background: #F6F8FB;
+            --surface: #FFFFFF;
+            --surface-alt: #FDFDFD;
+            
+            /* Text Colors */
+            --text-primary: #2D3748;
+            --text-secondary: #718096;
+            --text-tertiary: #A0AEC0;
+            --text-inverse: #FFFFFF;
+            
+            /* Status Colors */
+            --success: #48BB78;
+            --warning: #F6AD55;
+            --danger: #F56565;
+            --info: #4299E1;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            
+            /* Font Families */
+            --font-primary: 'Josefin Sans', sans-serif;
+            --font-secondary: 'Inter', sans-serif;
+            
+            /* Font Sizes */
+            --text-xs: 12px;
+            --text-sm: 14px;
+            --text-base: 16px;
+            --text-lg: 18px;
+            --text-xl: 20px;
+            --text-2xl: 24px;
+            --text-3xl: 32px;
+            
+            /* Font Weights */
+            --font-normal: 400;
+            --font-medium: 500;
+            --font-semibold: 600;
+            --font-bold: 700;
+            
+            /* Spacing System */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+        }
+
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-secondary);
+            background-color: var(--background);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* App Container */
+        .app-container {
+            max-width: 375px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--background);
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Screen Management */
+        .screen {
+            display: none;
+            min-height: 100vh;
+            padding-bottom: 80px; /* Space for bottom nav */
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Header Component */
+        .header {
+            background: var(--surface);
+            padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-greeting {
+            font-family: var(--font-primary);
+            font-size: var(--text-lg);
+            font-weight: var(--font-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .header-subtext {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-profile {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-inverse);
+            font-weight: var(--font-semibold);
+            font-size: var(--text-base);
+        }
+
+        .notification-badge {
+            position: relative;
+            background: none;
+            border: none;
+            padding: var(--spacing-sm);
+            cursor: pointer;
+        }
+
+        .notification-badge::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+        }
+
+        /* Card Component */
+        .card {
+            background: var(--surface);
+            border-radius: 15px;
+            padding: var(--spacing-md);
+            margin: var(--spacing-md);
+            box-shadow: var(--shadow-md);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:active {
+            transform: scale(0.98);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Statistics Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+            padding: 0 var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border-radius: 15px;
+            padding: var(--spacing-md);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:active {
+            transform: scale(0.95);
+        }
+
+        .stat-number {
+            font-family: var(--font-primary);
+            font-size: var(--text-2xl);
+            font-weight: var(--font-bold);
+            color: var(--primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .stat-label {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            font-weight: var(--font-medium);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            padding: 0 var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .section-title {
+            font-family: var(--font-primary);
+            font-size: var(--text-lg);
+            font-weight: var(--font-semibold);
+            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+        }
+
+        .action-button {
+            background: var(--surface);
+            border: none;
+            border-radius: 15px;
+            padding: var(--spacing-lg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-sm);
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .action-button:active {
+            transform: scale(0.95);
+        }
+
+        .action-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--primary);
+            color: var(--text-inverse);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .action-label {
+            font-size: var(--text-sm);
+            font-weight: var(--font-medium);
+            color: var(--text-primary);
+        }
+
+        /* Project Cards */
+        .project-card {
+            background: var(--surface);
+            border-radius: 15px;
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .project-card:active {
+            transform: scale(0.98);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .project-title {
+            font-family: var(--font-primary);
+            font-size: var(--text-lg);
+            font-weight: var(--font-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .project-description {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .project-status {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            font-size: var(--text-xs);
+            font-weight: var(--font-medium);
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: rgba(72, 187, 120, 0.1);
+            color: var(--success);
+        }
+
+        .status-planning {
+            background: rgba(66, 153, 225, 0.1);
+            color: var(--info);
+        }
+
+        .status-completed {
+            background: rgba(255, 131, 104, 0.1);
+            color: var(--primary);
+        }
+
+        .progress-section {
+            margin: var(--spacing-md) 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .progress-label {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+        }
+
+        .progress-percentage {
+            font-size: var(--text-sm);
+            color: var(--primary);
+            font-weight: var(--font-semibold);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 131, 104, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: var(--spacing-md);
+        }
+
+        .team-avatars {
+            display: flex;
+            gap: -8px;
+        }
+
+        .team-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border: 2px solid var(--surface);
+            margin-left: -8px;
+        }
+
+        .team-avatar:first-child {
+            margin-left: 0;
+        }
+
+        .task-count {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+        }
+
+        /* Task Cards */
+        .task-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: var(--spacing-md);
+            margin: var(--spacing-sm) var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            border-left: 4px solid var(--primary);
+        }
+
+        .task-card:active {
+            transform: scale(0.98);
+        }
+
+        .task-header {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-tertiary);
+            border-radius: 4px;
+            margin-top: 2px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .task-checkbox.checked {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .task-checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            top: -2px;
+            left: 2px;
+            color: white;
+            font-size: 12px;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: var(--text-base);
+            font-weight: var(--font-medium);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .task-description {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .task-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-assignee {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .task-assignee-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+
+        .task-assignee-name {
+            font-size: var(--text-xs);
+            color: var(--text-secondary);
+        }
+
+        .task-due-date {
+            font-size: var(--text-xs);
+            color: var(--text-secondary);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: var(--background);
+            border-radius: 12px;
+        }
+
+        /* Priority Indicators */
+        .priority-high {
+            border-left-color: var(--danger);
+        }
+
+        .priority-medium {
+            border-left-color: var(--warning);
+        }
+
+        .priority-low {
+            border-left-color: var(--success);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 375px;
+            background: var(--surface);
+            padding: var(--spacing-sm) 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-items {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 48px;
+            min-width: 48px;
+            text-decoration: none;
+            color: var(--text-tertiary);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item:active {
+            transform: scale(0.9);
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .nav-add {
+            background: var(--primary);
+            color: var(--text-inverse);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .nav-label {
+            font-size: var(--text-xs);
+            font-weight: var(--font-medium);
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: var(--surface);
+            display: flex;
+            gap: var(--spacing-sm);
+            overflow-x: auto;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .filter-chip {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: 20px;
+            background: var(--background);
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+            font-weight: var(--font-medium);
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            color: var(--text-inverse);
+        }
+
+        /* Search Bar */
+        .search-bar {
+            padding: var(--spacing-lg);
+            background: var(--surface);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: none;
+            border-radius: 15px;
+            background: var(--background);
+            font-size: var(--text-base);
+            font-family: var(--font-secondary);
+            color: var(--text-primary);
+            outline: none;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .search-input:focus {
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        /* Profile Screen */
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-xl);
+            text-align: center;
+            color: var(--text-inverse);
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            margin: 0 auto var(--spacing-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+            font-weight: var(--font-bold);
+        }
+
+        .profile-name {
+            font-family: var(--font-primary);
+            font-size: var(--text-xl);
+            font-weight: var(--font-semibold);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .profile-role {
+            font-size: var(--text-sm);
+            opacity: 0.9;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: var(--spacing-lg);
+            padding: var(--spacing-lg);
+            background: var(--surface);
+            margin: 0 var(--spacing-lg);
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-20px);
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .profile-stat-number {
+            font-family: var(--font-primary);
+            font-size: var(--text-xl);
+            font-weight: var(--font-bold);
+            color: var(--primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .profile-stat-label {
+            font-size: var(--text-xs);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: var(--font-medium);
+        }
+
+        /* Menu Items */
+        .menu-section {
+            padding: var(--spacing-lg);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+            background: var(--surface);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .menu-item:active {
+            transform: scale(0.98);
+        }
+
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 131, 104, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .menu-content {
+            flex: 1;
+        }
+
+        .menu-title {
+            font-weight: var(--font-medium);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .menu-subtitle {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+        }
+
+        .menu-arrow {
+            color: var(--text-tertiary);
+            font-size: 16px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-2xl);
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: var(--spacing-md);
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-family: var(--font-primary);
+            font-size: var(--text-lg);
+            font-weight: var(--font-semibold);
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-primary);
+        }
+
+        .empty-description {
+            font-size: var(--text-sm);
+            line-height: 1.4;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--text-inverse);
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            z-index: 999;
+        }
+
+        .fab:active {
+            transform: scale(0.9);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 375px) {
+            .app-container {
+                max-width: 100%;
+            }
+            
+            .bottom-nav {
+                max-width: 100%;
+            }
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Utility classes */
+        .mt-lg { margin-top: var(--spacing-lg); }
+        .mb-lg { margin-bottom: var(--spacing-lg); }
+        .p-lg { padding: var(--spacing-lg); }
+        .text-center { text-align: center; }
+        .text-primary { color: var(--text-primary); }
+        .text-secondary { color: var(--text-secondary); }
+        .font-medium { font-weight: var(--font-medium); }
+        .font-semibold { font-weight: var(--font-semibold); }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Dashboard Screen -->
+        <div class="screen active" id="dashboard">
+            <div class="header">
+                <div class="header-actions">
+                    <div>
+                        <div class="header-greeting">Good morning, Sarah!</div>
+                        <div class="header-subtext">Let's make today productive</div>
+                    </div>
+                    <div class="header-profile">
+                        <button class="notification-badge">🔔</button>
+                        <div class="avatar">S</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Active Projects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">48</div>
+                    <div class="stat-label">Open Tasks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Team Members</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">87%</div>
+                    <div class="stat-label">Completion Rate</div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <h2 class="section-title">Quick Actions</h2>
+                <div class="action-grid">
+                    <button class="action-button" onclick="showScreen('projects')">
+                        <div class="action-icon">📁</div>
+                        <div class="action-label">New Project</div>
+                    </button>
+                    <button class="action-button" onclick="showScreen('tasks')">
+                        <div class="action-icon">✅</div>
+                        <div class="action-label">View Tasks</div>
+                    </button>
+                    <button class="action-button" onclick="showScreen('profile')">
+                        <div class="action-icon">👥</div>
+                        <div class="action-label">Team Overview</div>
+                    </button>
+                    <button class="action-button">
+                        <div class="action-icon">📊</div>
+                        <div class="action-label">Analytics</div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-lg">
+                <h2 class="section-title">Recent Projects</h2>
+                
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <div>
+                            <div class="project-title">Mobile App Redesign</div>
+                            <div class="project-description">Updating the user interface for better usability</div>
+                        </div>
+                        <div class="project-status status-active">Active</div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-header">
+                            <div class="progress-label">Progress</div>
+                            <div class="progress-percentage">68%</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 68%"></div>
+                        </div>
+                    </div>
+                    <div class="project-meta">
+                        <div class="team-avatars">
+                            <div class="team-avatar"></div>
+                            <div class="team-avatar"></div>
+                            <div class="team-avatar"></div>
+                        </div>
+                        <div class="task-count">12 tasks</div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <div>
+                            <div class="project-title">E-commerce Platform</div>
+                            <div class="project-description">Building a new online shopping experience</div>
+                        </div>
+                        <div class="project-status status-planning">Planning</div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-header">
+                            <div class="progress-label">Progress</div>
+                            <div class="progress-percentage">24%</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 24%"></div>
+                        </div>
+                    </div>
+                    <div class="project-meta">
+                        <div class="team-avatars">
+                            <div class="team-avatar"></div>
+                            <div class="team-avatar"></div>
+                        </div>
+                        <div class="task-count">8 tasks</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Screen -->
+        <div class="screen" id="projects">
+            <div class="header">
+                <div class="header-greeting">Projects</div>
+                <div class="header-subtext">Manage your team projects</div>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search projects...">
+            </div>
+
+            <div class="filter-bar">
+                <button class="filter-chip active">All</button>
+                <button class="filter-chip">Active</button>
+                <button class="filter-chip">Planning</button>
+                <button class="filter-chip">Completed</button>
+                <button class="filter-chip">On Hold</button>
+            </div>
+
+            <div class="project-card fade-in">
+                <div class="project-header">
+                    <div>
+                        <div class="project-title">Mobile App Redesign</div>
+                        <div class="project-description">Complete overhaul of the mobile application with focus on user experience and modern design patterns</div>
+                    </div>
+                    <div class="project-status status-active">Active</div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <div class="progress-label">Progress</div>
+                        <div class="progress-percentage">68%</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 68%"></div>
+                    </div>
+                </div>
+                <div class="project-meta">
+                    <div class="team-avatars">
+                        <div class="team-avatar"></div>
+                        <div class="team-avatar"></div>
+                        <div class="team-avatar"></div>
+                        <div class="team-avatar"></div>
+                    </div>
+                    <div class="task-count">12 tasks • Due Mar 15</div>
+                </div>
+            </div>
+
+            <div class="project-card fade-in">
+                <div class="project-header">
+                    <div>
+                        <div class="project-title">E-commerce Platform</div>
+                        <div class="project-description">New online shopping platform with advanced features and seamless user experience</div>
+                    </div>
+                    <div class="project-status status-planning">Planning</div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <div class="progress-label">Progress</div>
+                        <div class="progress-percentage">24%</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 24%"></div>
+                    </div>
+                </div>
+                <div class="project-meta">
+                    <div class="team-avatars">
+                        <div class="team-avatar"></div>
+                        <div class="team-avatar"></div>
+                        <div class="team-avatar"></div>
+                    </div>
+                    <div class="task-count">8 tasks • Due Apr 20</div>
+                </div>
+            </div>
+
+            <div class="project-card fade-in">
+                <div class="project-header">
+                    <div>
+                        <div class="project-title">Marketing Campaign</div>
+                        <div class="project-description">Q2 digital marketing campaign for product launch</div>
+                    </div>
+                    <div class="project-status status-completed">Completed</div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <div class="progress-label">Progress</div>
+                        <div class="progress-percentage">100%</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="project-meta">
+                    <div class="team-avatars">
+                        <div class="team-avatar"></div>
+                        <div class="team-avatar"></div>
+                    </div>
+                    <div class="task-count">15 tasks • Completed</div>
+                </div>
+            </div>
+
+            <button class="fab">+</button>
+        </div>
+
+        <!-- Tasks Screen -->
+        <div class="screen" id="tasks">
+            <div class="header">
+                <div class="header-greeting">Tasks</div>
+                <div class="header-subtext">Your assignments and deadlines</div>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search tasks...">
+            </div>
+
+            <div class="filter-bar">
+                <button class="filter-chip active">All</button>
+                <button class="filter-chip">To Do</button>
+                <button class="filter-chip">In Progress</button>
+                <button class="filter-chip">Review</button>
+                <button class="filter-chip">Done</button>
+            </div>
+
+            <div class="task-card priority-high fade-in">
+                <div class="task-header">
+                    <div class="task-checkbox"></div>
+                    <div class="task-content">
+                        <div class="task-title">Design user onboarding flow</div>
+                        <div class="task-description">Create wireframes and prototypes for the new user registration and onboarding process</div>
+                        <div class="task-meta">
+                            <div class="task-assignee">
+                                <div class="task-assignee-avatar"></div>
+                                <div class="task-assignee-name">Assigned to John</div>
+                            </div>
+                            <div class="task-due-date">Due Mar 12</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-card priority-medium fade-in">
+                <div class="task-header">
+                    <div class="task-checkbox checked"></div>
+                    <div class="task-content">
+                        <div class="task-title">Implement user authentication</div>
+                        <div class="task-description">Set up login, registration, and password recovery functionality</div>
+                        <div class="task-meta">
+                            <div class="task-assignee">
+                                <div class="task-assignee-avatar"></div>
+                                <div class="task-assignee-name">Assigned to Sarah</div>
+                            </div>
+                            <div class="task-due-date">Due Mar 10</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-card priority-low fade-in">
+                <div class="task-header">
+                    <div class="task-checkbox"></div>
+                    <div class="task-content">
+                        <div class="task-title">Update project documentation</div>
+                        <div class="task-description">Review and update all project documentation and README files</div>
+                        <div class="task-meta">
+                            <div class="task-assignee">
+                                <div class="task-assignee-avatar"></div>
+                                <div class="task-assignee-name">Assigned to Mike</div>
+                            </div>
+                            <div class="task-due-date">Due Mar 18</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-card priority-high fade-in">
+                <div class="task-header">
+                    <div class="task-checkbox"></div>
+                    <div class="task-content">
+                        <div class="task-title">Optimize database queries</div>
+                        <div class="task-description">Identify and optimize slow database queries for better performance</div>
+                        <div class="task-meta">
+                            <div class="task-assignee">
+                                <div class="task-assignee-avatar"></div>
+                                <div class="task-assignee-name">Assigned to Alex</div>
+                            </div>
+                            <div class="task-due-date">Due Mar 14</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-card priority-medium fade-in">
+                <div class="task-header">
+                    <div class="task-checkbox"></div>
+                    <div class="task-content">
+                        <div class="task-title">Setup CI/CD pipeline</div>
+                        <div class="task-description">Configure automated testing and deployment pipeline</div>
+                        <div class="task-meta">
+                            <div class="task-assignee">
+                                <div class="task-assignee-avatar"></div>
+                                <div class="task-assignee-name">Assigned to Emma</div>
+                            </div>
+                            <div class="task-due-date">Due Mar 16</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="fab">+</button>
+        </div>
+
+        <!-- Profile Screen -->
+        <div class="screen" id="profile">
+            <div class="profile-header">
+                <div class="profile-avatar">S</div>
+                <div class="profile-name">Sarah Johnson</div>
+                <div class="profile-role">Product Manager</div>
+            </div>
+
+            <div class="profile-stats">
+                <div class="profile-stat">
+                    <div class="profile-stat-number">24</div>
+                    <div class="profile-stat-label">Projects</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-number">156</div>
+                    <div class="profile-stat-label">Tasks</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-number">89%</div>
+                    <div class="profile-stat-label">Success</div>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <a href="#" class="menu-item">
+                    <div class="menu-icon">👤</div>
+                    <div class="menu-content">
+                        <div class="menu-title">Personal Information</div>
+                        <div class="menu-subtitle">Update your profile details</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <div class="menu-icon">🔔</div>
+                    <div class="menu-content">
+                        <div class="menu-title">Notifications</div>
+                        <div class="menu-subtitle">Manage your notification preferences</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <div class="menu-icon">🎨</div>
+                    <div class="menu-content">
+                        <div class="menu-title">Appearance</div>
+                        <div class="menu-subtitle">Theme and display settings</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <div class="menu-icon">🔒</div>
+                    <div class="menu-content">
+                        <div class="menu-title">Privacy & Security</div>
+                        <div class="menu-subtitle">Manage your privacy settings</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <div class="menu-icon">❓</div>
+                    <div class="menu-content">
+                        <div class="menu-title">Help & Support</div>
+                        <div class="menu-subtitle">Get help and contact support</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <div class="menu-icon">📄</div>
+                    <div class="menu-content">
+                        <div class="menu-title">Terms & Privacy</div>
+                        <div class="menu-subtitle">Legal information and policies</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </a>
+
+                <a href="#" class="menu-item" style="color: var(--danger);">
+                    <div class="menu-icon" style="background: rgba(245, 101, 101, 0.1); color: var(--danger);">🚪</div>
+                    <div class="menu-content">
+                        <div class="menu-title">Sign Out</div>
+                        <div class="menu-subtitle">Log out of your account</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Add Screen (Modal-like) -->
+        <div class="screen" id="add">
+            <div class="header">
+                <div class="header-greeting">Create New</div>
+                <div class="header-subtext">What would you like to create?</div>
+            </div>
+
+            <div class="p-lg">
+                <div class="action-grid">
+                    <button class="action-button">
+                        <div class="action-icon">📁</div>
+                        <div class="action-label">New Project</div>
+                    </button>
+                    <button class="action-button">
+                        <div class="action-icon">✅</div>
+                        <div class="action-label">New Task</div>
+                    </button>
+                    <button class="action-button">
+                        <div class="action-icon">👥</div>
+                        <div class="action-label">Invite Member</div>
+                    </button>
+                    <button class="action-button">
+                        <div class="action-icon">📊</div>
+                        <div class="action-label">Create Report</div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="empty-state">
+                <div class="empty-icon">✨</div>
+                <div class="empty-title">Quick Actions</div>
+                <div class="empty-description">Select an option above to get started with creating new content for your projects.</div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-items">
+                <a href="#" class="nav-item active" onclick="showScreen('dashboard')">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Dashboard</div>
+                </a>
+                <a href="#" class="nav-item" onclick="showScreen('projects')">
+                    <div class="nav-icon">📁</div>
+                    <div class="nav-label">Projects</div>
+                </a>
+                <a href="#" class="nav-item nav-add" onclick="showScreen('add')">
+                    <div class="nav-icon">+</div>
+                </a>
+                <a href="#" class="nav-item" onclick="showScreen('tasks')">
+                    <div class="nav-icon">✅</div>
+                    <div class="nav-label">Tasks</div>
+                </a>
+                <a href="#" class="nav-item" onclick="showScreen('profile')">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Profile</div>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        // Simple screen management
+        function showScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Show selected screen
+            document.getElementById(screenId).classList.add('active');
+            
+            // Update nav active state
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Find and activate corresponding nav item
+            const navItems = document.querySelectorAll('.nav-item');
+            const screenMap = {
+                'dashboard': 0,
+                'projects': 1,
+                'add': 2,
+                'tasks': 3,
+                'profile': 4
+            };
+            
+            if (screenMap[screenId] !== undefined) {
+                navItems[screenMap[screenId]].classList.add('active');
+            }
+        }
+
+        // Task checkbox interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    this.classList.toggle('checked');
+                });
+            });
+
+            // Filter chips interaction
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Add subtle animations to cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.card, .project-card, .task-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                observer.observe(card);
+            });
+        });
+
+        // Simulate touch feedback for better mobile feel
+        document.addEventListener('touchstart', function() {}, {passive: true});
+
+        // Prevent zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>

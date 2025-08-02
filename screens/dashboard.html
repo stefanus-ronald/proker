@@ -1,0 +1,206 @@
+<!-- Dashboard Screen -->
+<div class="screen" id="dashboard-screen">
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h1 class="dashboard-greeting">Good Morning, <span id="user-name">John</span>! 👋</h1>
+        <p class="dashboard-subtitle">Here's your project overview</p>
+    </div>
+    
+    <!-- Statistics Grid -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+            </div>
+            <div class="stat-value" id="total-projects">12</div>
+            <div class="stat-label">Total Projects</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11l3 3L22 4"></path>
+                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+                </svg>
+            </div>
+            <div class="stat-value" id="active-tasks">24</div>
+            <div class="stat-label">Active Tasks</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+            </div>
+            <div class="stat-value" id="team-members">8</div>
+            <div class="stat-label">Team Members</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <div class="stat-value" id="completion-rate">78%</div>
+            <div class="stat-label">Completion Rate</div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h3 class="quick-actions-title">Quick Actions</h3>
+        <div class="quick-actions-grid">
+            <button class="quick-action-btn" onclick="app.showCreateProject()">
+                <svg class="quick-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2v20M2 12h20"></path>
+                </svg>
+                <span class="quick-action-label">New Project</span>
+            </button>
+            
+            <button class="quick-action-btn" onclick="app.showCreateTask()">
+                <svg class="quick-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11l3 3L22 4"></path>
+                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+                </svg>
+                <span class="quick-action-label">Add Task</span>
+            </button>
+            
+            <button class="quick-action-btn" onclick="app.navigateTo('team')">
+                <svg class="quick-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7" r="4"></circle>
+                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+                <span class="quick-action-label">Invite Team</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Recent Projects -->
+    <div class="recent-section">
+        <div class="section-header">
+            <h3 class="section-title">Recent Projects</h3>
+            <a href="#/projects" class="section-link">View all</a>
+        </div>
+        
+        <div id="recent-projects-list">
+            <!-- Project Card Example -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div>
+                        <h4 class="project-title">Mobile App Redesign</h4>
+                        <p class="project-description">Redesigning the user interface for better UX</p>
+                    </div>
+                    <span class="badge badge-primary">Active</span>
+                </div>
+                
+                <div class="project-progress">
+                    <div class="project-progress-bar">
+                        <div class="project-progress-fill" style="width: 65%;"></div>
+                    </div>
+                </div>
+                
+                <div class="project-footer">
+                    <div class="project-team">
+                        <div class="team-avatars">
+                            <div class="team-avatar">JD</div>
+                            <div class="team-avatar" style="background-color: var(--success);">AS</div>
+                            <div class="team-avatar" style="background-color: var(--warning);">MK</div>
+                        </div>
+                        <span class="team-count">+2 more</span>
+                    </div>
+                    <span class="project-tasks">8/12 tasks</span>
+                </div>
+            </div>
+            
+            <!-- Another Project Card -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div>
+                        <h4 class="project-title">Website Development</h4>
+                        <p class="project-description">Building new company website with CMS</p>
+                    </div>
+                    <span class="badge badge-warning">In Review</span>
+                </div>
+                
+                <div class="project-progress">
+                    <div class="project-progress-bar">
+                        <div class="project-progress-fill" style="width: 85%;"></div>
+                    </div>
+                </div>
+                
+                <div class="project-footer">
+                    <div class="project-team">
+                        <div class="team-avatars">
+                            <div class="team-avatar" style="background-color: var(--info);">TW</div>
+                            <div class="team-avatar">KL</div>
+                        </div>
+                        <span class="team-count">2 members</span>
+                    </div>
+                    <span class="project-tasks">15/18 tasks</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Upcoming Deadlines -->
+    <div class="recent-section">
+        <div class="section-header">
+            <h3 class="section-title">Upcoming Deadlines</h3>
+            <a href="#/tasks" class="section-link">View all</a>
+        </div>
+        
+        <div class="task-list" id="upcoming-tasks-list">
+            <div class="task-item">
+                <input type="checkbox" class="task-checkbox" onchange="tasks.toggleTask('1')">
+                <div class="task-content">
+                    <div class="task-title">Complete wireframes for homepage</div>
+                    <div class="task-meta">
+                        <span class="task-priority">
+                            <span class="priority-dot priority-high"></span>
+                            High Priority
+                        </span>
+                        <span>Due Tomorrow</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="task-item">
+                <input type="checkbox" class="task-checkbox" onchange="tasks.toggleTask('2')">
+                <div class="task-content">
+                    <div class="task-title">Review API documentation</div>
+                    <div class="task-meta">
+                        <span class="task-priority">
+                            <span class="priority-dot priority-medium"></span>
+                            Medium Priority
+                        </span>
+                        <span>Due in 2 days</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="task-item">
+                <input type="checkbox" class="task-checkbox" onchange="tasks.toggleTask('3')">
+                <div class="task-content">
+                    <div class="task-title">Client presentation preparation</div>
+                    <div class="task-meta">
+                        <span class="task-priority">
+                            <span class="priority-dot priority-high"></span>
+                            High Priority
+                        </span>
+                        <span>Due in 3 days</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

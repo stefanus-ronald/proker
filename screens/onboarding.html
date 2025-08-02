@@ -1,0 +1,80 @@
+<!-- Splash Screen -->
+<div class="screen onboarding-screen" id="splash-screen">
+    <div class="onboarding-logo">PK</div>
+    <h1 class="onboarding-title">ProKer</h1>
+    <p class="onboarding-description">Project Management Made Simple</p>
+    <div class="loading-dots">
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+    </div>
+</div>
+
+<!-- Welcome Screen 1 -->
+<div class="screen onboarding-screen" id="welcome-1" style="display: none;">
+    <div class="onboarding-illustration">
+        <svg viewBox="0 0 280 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="40" y="40" width="200" height="120" rx="8" fill="var(--muted)"/>
+            <rect x="60" y="60" width="160" height="20" rx="4" fill="var(--border)"/>
+            <rect x="60" y="90" width="120" height="16" rx="4" fill="var(--border)"/>
+            <rect x="60" y="116" width="140" height="16" rx="4" fill="var(--border)"/>
+            <circle cx="220" cy="140" r="30" fill="var(--primary)"/>
+            <path d="M210 140L215 145L230 130" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </div>
+    <h2 class="onboarding-title">Manage Your Projects</h2>
+    <p class="onboarding-description">Keep track of all your projects in one place. Set deadlines, assign team members, and monitor progress effortlessly.</p>
+    <div class="onboarding-dots">
+        <div class="onboarding-dot active"></div>
+        <div class="onboarding-dot"></div>
+        <div class="onboarding-dot"></div>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="app.showOnboardingScreen(2)">Next</button>
+</div>
+
+<!-- Welcome Screen 2 -->
+<div class="screen onboarding-screen" id="welcome-2" style="display: none;">
+    <div class="onboarding-illustration">
+        <svg viewBox="0 0 280 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="40" y="40" width="60" height="60" rx="8" fill="var(--muted)"/>
+            <rect x="110" y="40" width="60" height="60" rx="8" fill="var(--muted)"/>
+            <rect x="180" y="40" width="60" height="60" rx="8" fill="var(--muted)"/>
+            <rect x="40" y="110" width="60" height="60" rx="8" fill="var(--muted)"/>
+            <rect x="110" y="110" width="60" height="60" rx="8" fill="var(--primary)" opacity="0.2"/>
+            <rect x="180" y="110" width="60" height="60" rx="8" fill="var(--muted)"/>
+            <circle cx="140" cy="140" r="20" fill="var(--primary)"/>
+            <path d="M140 130V150M130 140H150" stroke="white" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+    </div>
+    <h2 class="onboarding-title">Collaborate with Your Team</h2>
+    <p class="onboarding-description">Work together seamlessly. Share updates, assign tasks, and communicate with your team all in one app.</p>
+    <div class="onboarding-dots">
+        <div class="onboarding-dot"></div>
+        <div class="onboarding-dot active"></div>
+        <div class="onboarding-dot"></div>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="app.showOnboardingScreen(3)">Next</button>
+</div>
+
+<!-- Welcome Screen 3 -->
+<div class="screen onboarding-screen" id="welcome-3" style="display: none;">
+    <div class="onboarding-illustration">
+        <svg viewBox="0 0 280 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="60" y="40" width="160" height="100" rx="8" fill="var(--muted)"/>
+            <rect x="80" y="60" width="120" height="8" rx="4" fill="var(--primary)" opacity="0.3"/>
+            <rect x="80" y="76" width="80" height="8" rx="4" fill="var(--primary)" opacity="0.5"/>
+            <rect x="80" y="92" width="100" height="8" rx="4" fill="var(--primary)" opacity="0.7"/>
+            <rect x="80" y="108" width="60" height="8" rx="4" fill="var(--primary)"/>
+            <circle cx="140" cy="160" r="20" fill="var(--success)"/>
+            <path d="M130 160L135 165L150 150" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </div>
+    <h2 class="onboarding-title">Track Progress</h2>
+    <p class="onboarding-description">Stay on top of deadlines and milestones. Get real-time updates on project progress and team productivity.</p>
+    <div class="onboarding-dots">
+        <div class="onboarding-dot"></div>
+        <div class="onboarding-dot"></div>
+        <div class="onboarding-dot active"></div>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="app.navigateTo('login')">Get Started</button>
+</div>

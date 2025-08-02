@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProKer Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #FF5252;
+        }
+        .log {
+            background: #f5f5f5;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ProKer Test Page</h1>
+        <p>Use this page to test the ProKer application.</p>
+        
+        <h2>Quick Actions:</h2>
+        <button onclick="clearStorage()">Clear All Storage</button>
+        <button onclick="skipOnboarding()">Skip Onboarding</button>
+        <button onclick="loginAsDemo()">Login as Demo User</button>
+        <button onclick="goToApp()">Go to App</button>
+        
+        <h2>Current Storage:</h2>
+        <div id="storage-info" class="log"></div>
+        
+        <h2>Console Log:</h2>
+        <div id="console-log" class="log"></div>
+    </div>
+
+    <script>
+        // Update storage info
+        function updateStorageInfo() {
+            const storageInfo = document.getElementById('storage-info');
+            const keys = ['proker_user', 'proker_session', 'proker_projects', 'proker_tasks', 'proker_onboarding_complete'];
+            let html = '';
+            
+            keys.forEach(key => {
+                const value = localStorage.getItem(key);
+                if (value) {
+                    try {
+                        const parsed = JSON.parse(value);
+                        html += `<strong>${key}:</strong> ${JSON.stringify(parsed, null, 2).substring(0, 100)}...<br><br>`;
+                    } catch {
+                        html += `<strong>${key}:</strong> ${value}<br><br>`;
+                    }
+                } else {
+                    html += `<strong>${key}:</strong> <em>Not set</em><br><br>`;
+                }
+            });
+            
+            storageInfo.innerHTML = html;
+        }
+        
+        // Log to console div
+        function log(message) {
+            const consoleLog = document.getElementById('console-log');
+            const time = new Date().toLocaleTimeString();
+            consoleLog.innerHTML += `[${time}] ${message}<br>`;
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+        }
+        
+        // Clear storage
+        function clearStorage() {
+            localStorage.clear();
+            log('All storage cleared');
+            updateStorageInfo();
+        }
+        
+        // Skip onboarding
+        function skipOnboarding() {
+            localStorage.setItem('proker_onboarding_complete', 'true');
+            log('Onboarding marked as complete');
+            updateStorageInfo();
+        }
+        
+        // Login as demo user
+        function loginAsDemo() {
+            const user = {
+                id: '1',
+                name: 'Demo User',
+                email: 'demo@example.com',
+                role: 'admin',
+                avatar: '',
+                createdAt: new Date().toISOString(),
+                preferences: {
+                    theme: 'light',
+                    notifications: true
+                }
+            };
+            
+            const session = {
+                token: 'demo-token-' + Date.now(),
+                expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+            };
+            
+            localStorage.setItem('proker_user', JSON.stringify(user));
+            localStorage.setItem('proker_session', JSON.stringify(session));
+            localStorage.setItem('proker_onboarding_complete', 'true');
+            
+            log('Logged in as demo user');
+            updateStorageInfo();
+        }
+        
+        // Go to app
+        function goToApp() {
+            window.location.href = 'index.html';
+        }
+        
+        // Initial update
+        updateStorageInfo();
+        log('Test page loaded');
+    </script>
+</body>
+</html>
